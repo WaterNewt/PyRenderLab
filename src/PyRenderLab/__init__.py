@@ -1,9 +1,10 @@
 import sys
 import pygame
 import numpy as np
-from src.PyRenderLab.constants import *
+from os import PathLike
 from abc import ABC, abstractmethod
-from typing import Iterable, Union, Tuple, Sequence
+from src.PyRenderLab.constants import *
+from typing import Iterable, Union, Tuple, Sequence, IO
 
 RGBAOutput = Tuple[int, int, int, int]
 Position = Tuple[float, float, float]
@@ -85,10 +86,16 @@ class Shape3D(ABC):
 
 
 class Game:
-    def __init__(self, bg_color: ColorValue = None, update = None, size: Tuple[float, float] = (800, 600)) -> None:
+    def __init__(self, bg_color: ColorValue = None, update=None, size: Tuple[float, float] = (800, 600), window_title: str = None, icon_image: Union[str, bytes, PathLike[str], PathLike[bytes], IO[bytes], IO[str]] = None) -> None:
         pygame.init()
         self.size = size
         self.screen = pygame.display.set_mode(size)
+        if window_title is not None:
+            self.caption = window_title
+            pygame.display.set_caption(self.caption)
+        if icon_image is not None:
+            icon = pygame.image.load(icon_image)
+            pygame.display.set_icon(icon)
         self.update = None if update is None else update
         self.bg_color = (0, 0, 0) if bg_color is None else bg_color
         self.object_instances = []
