@@ -1,3 +1,4 @@
+# Keys
 K_0 = 48
 K_1 = 49
 K_2 = 50
@@ -156,6 +157,11 @@ K_x = 120
 K_y = 121
 K_z = 122
 
+# Angles
 ANGLE_X = 0
 ANGLE_Y = 1
 ANGLE_Z = 2
+
+# Raise messages
+INVALID_OBJECT_TYPE = "Object must be a subclass of the Shape3D class"
+INVALID_OUTLINE_HEIGHT_TYPE = "outline_height must be an integer"
