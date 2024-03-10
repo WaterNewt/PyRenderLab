@@ -1,3 +1,4 @@
+# Imports
 import sys
 import pygame
 import numpy as np
@@ -6,11 +7,13 @@ from abc import ABC, abstractmethod
 from src.PyRenderLab.constants import *
 from typing import Iterable, Union, Tuple, Sequence, IO
 
+# Custom types
 RGBAOutput = Tuple[int, int, int, int]
 Position = Tuple[float, float, float]
 ColorValue = Union[pygame.Color, int, str, Tuple[int, int, int], RGBAOutput, Sequence[int]]
 Coordinate = Union[Tuple[float, float], Sequence[float], pygame.math.Vector2]
 Number = Union[float, int]
+ImagePath = Union[str, bytes, PathLike[str], PathLike[bytes], IO[bytes], IO[str]]
 
 
 def inform(message: str, exit_code=-1):
@@ -20,7 +23,7 @@ def inform(message: str, exit_code=-1):
 
 class Shape3D(ABC):
     """
-    An Abstract Base Class for a 3D geometrical shape in a game.
+    An Abstract Base Class for all 3D geometrical shapes in a game.
     """
     def __init__(self, gameInstance: 'Game', size: Number, texture: 'Texture' = None, position: Position = None, outline_height: int = 1) -> None:
         """Initialization of the shape.
@@ -49,6 +52,9 @@ class Shape3D(ABC):
         self.projected_vertices = None
 
     def calculations(self):
+        """
+        Calculations for rotating the 3D shape
+        """
         self.rotation_x = np.array([[1, 0, 0],
                                [0, np.cos(self.angle_x), -np.sin(self.angle_x)],
                                [0, np.sin(self.angle_x), np.cos(self.angle_x)]])
@@ -68,6 +74,16 @@ class Shape3D(ABC):
         self.projected_vertices = self.rotated_vertices[:, :2] + (self.x, self.y)
 
     def rotate(self, angle: int, value: Number):
+        """
+        Rotate the shape. It is recommended to use the angle parameter (.angle_x, .angle_y or .angle_z) instead.
+
+        Args:
+            angle (either ANGLE_X, ANGLE_Y or ANGLE_Z): The angle of the shape to rotate.
+            value (Number): The value that the angle of the shape will be set to.
+
+        Raises:
+            A ValueError will be raised if the angle argument is invalid.
+        """
         if angle == ANGLE_X:
             self.angle_x = value
         elif angle == ANGLE_Y:
@@ -86,9 +102,22 @@ class Shape3D(ABC):
 
 
 class Game:
-    def __init__(self, bg_color: ColorValue = None, update=None, size: Tuple[float, float] = (800, 600), window_title: str = None, icon_image: Union[str, bytes, PathLike[str], PathLike[bytes], IO[bytes], IO[str]] = None) -> None:
+    """
+    The class for the game itself
+    """
+    def __init__(self, bg_color: ColorValue = None, update=None, size: Tuple[float, float] = None, window_title: str = None, icon_image: ImagePath = None) -> None:
+        """
+        Initialize the game
+
+        Args:
+            bg_color (ColorValue): The background color of the window.
+            update (function): A function that will run every single tick of the game.
+            size (Tuple[float, float]): The size of the game's window.
+            window_title (str): The title of the game's window.
+            icon_image (ImagePath): The icon of the game's window.
+        """
         pygame.init()
-        self.size = size
+        self.size = (800, 600) if size is None else size
         self.screen = pygame.display.set_mode(size)
         if window_title is not None:
             self.caption = window_title
@@ -101,10 +130,28 @@ class Game:
         self.object_instances = []
         self.run = True
 
-    def add_objects(self, instances: list):
+    def add_objects(self, instances: Iterable):
+        """
+        Add objects to the game.
+
+        Args:
+            instances (A list of subclasses of the Shape3D class): The list of objects that will be added into the game.
+
+        Raises:
+            Will raise a TypeError if an item in the instances is not a subclass of the Shape3D class.
+        """
+        for index, value in enumerate(instances):
+            if not issubclass(value, Shape3D):
+                raise TypeError(f"Item {str(index)} must be sub classes of the Shape3D class")
         self.object_instances = instances
 
-    def display(self, fps: int):
+    def display(self, fps: float):
+        """
+        Display the game window
+
+        Args:
+            fps (float): The frame rate that the window will be updated at
+        """
         clock = pygame.time.Clock()
 
         while self.run:
@@ -123,23 +170,55 @@ class Game:
             clock.tick(fps)
 
     def stop(self):
+        """
+        Stop the game
+        """
         self.run = False
 
     def __repr__(self) -> str:
+        """
+        A string with the attributes of the instance of the class
+        """
         return f'Game(update={None if self.update is None else str(self.update.__name__)})'
 
 
 class Texture:
-    def __init__(self, img_path: str = None, color: ColorValue = None) -> None:
+    """
+    A Texture class that may be used for shapes
+    """
+    def __init__(self, img_path: ImagePath = None, color: ColorValue = None) -> None:
+        """
+        Initialize the Texture
+
+        Args:
+            img_path (ImagePath): The path to the image
+            color (ColorValue): A solid color for the shape
+        """
         self.img_path = img_path
         self.color = color
 
     def __repr__(self) -> str:
+        """
+        A string with the attributes of the instance of the class
+        """
         return f'Texture(img_path={str(self.img_path)}, color={str(tuple(self.color))})'
 
 
 class Cube(Shape3D):
-    def __init__(self, gameInstance: Game, size: float, texture: Texture = None, position: Iterable = None, outline_height=1) -> None:
+    """
+    A class for a 3D Cube
+    """
+    def __init__(self, gameInstance: Game, size: float, texture: Texture = Union[Texture, Tuple], position: Iterable[float, float, float] = None, outline_height: int = 1) -> None:
+        """
+        Initialize the Cube class
+
+        Args:
+            gameInstance (Instance of the Game class): An instance of your Game class.
+            size (float): The size of the cube.
+            texture (Texture or Tuple): The texture for the cube. Texture class or a tuple for a solid color.
+            position (Iterable): The 3-dimensional coordinate on the window where the cube will be.
+            outline_height (int): The height of the outline of the cube
+        """
         super().__init__(gameInstance, size, texture, position, outline_height)
         self.edges = [
             (0, 1), (1, 3), (3, 2), (2, 0),
@@ -152,6 +231,9 @@ class Cube(Shape3D):
         self.vertices = np.array([])
 
     def draw(self):
+        """
+        Draws the shape.
+        """
         self.vertices = np.array([[x, y, z] for x in ((self.size+self.z)/2, -(self.size+self.z)/2) for y in ((self.size+self.z)/2, -(self.size+self.z)/2) for z in ((self.size+self.z)/2, -(self.size+self.z)/2)])
         super().calculations()
         faces = [
@@ -176,11 +258,27 @@ class Cube(Shape3D):
             pygame.draw.line(self.game.screen, (0, 0, 0), start, end, self.line_height)
 
     def __repr__(self) -> str:
+        """
+        A string with the attributes of the instance of the class
+        """
         return f'Cube(game=({self.game}), size={str(self.size)}, position={str(list(self.position))})'
 
 
-class Triangle(Shape3D):
+class Prism(Shape3D):
+    """
+    A class for a 3D Prism
+    """
     def __init__(self, gameInstance: Game, size: float, texture: Texture = None, position: Iterable = None, outline_height=1) -> None:
+        """
+        Initialize the Prism class
+
+        Args:
+            gameInstance (Instance of the Prism class): An instance of your Game class.
+            size (float): The size of the prism.
+            texture (Texture or Tuple): The texture for the prism. Texture class or a tuple for a solid color.
+            position (Iterable): The 3-dimensional coordinate on the window where the prism will be.
+            outline_height (int): The height of the outline of the prism
+        """
         super().__init__(gameInstance, size, texture, position, outline_height)
         self.edges = [
             (0, 1), (1, 2), (2, 0),
@@ -193,6 +291,9 @@ class Triangle(Shape3D):
         self.angle_z = 0
 
     def draw(self):
+        """
+        Draw the shape
+        """
         self.vertices = np.array([
             [-(self.size+self.z)/2, -(self.size+self.z)/3, -(self.size+self.z)/2],
             [(self.size+self.z)/2, -(self.size+self.z)/3, -(self.size+self.z)/2],
@@ -230,4 +331,7 @@ class Triangle(Shape3D):
             pygame.draw.line(self.game.screen, (0, 0, 0), start, end, self.line_height)
 
     def __repr__(self) -> str:
-        return f'Triangle(game=({self.game}), size={str(self.size)}, position={str(list(self.position))})'
+        """
+        A string with the attributes of the instance of the class
+        """
+        return f'Prism(game=({self.game}), size={str(self.size)}, position={str(list(self.position))})'
