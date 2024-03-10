@@ -16,7 +16,7 @@ class TestPrism(unittest.TestCase):
         self.assertTrue(self.new_shape in self.game.object_instances)
 
     def test_rotate(self):
-        self.assertEquals(self.new_shape.angle_x, 69)
+        self.assertEqual(self.new_shape.angle_x, 69)
 
 
 class TestCube(unittest.TestCase):
