@@ -41,7 +41,7 @@ def update(keys):
 
 
 # Initialize game
-game = Game(bg_color=(100, 100, 100), size=WINDOW_SIZE, update=update)
+game = Game(bg_color=(100, 100, 100), size=WINDOW_SIZE, update=update, window_title="Showcase", icon_image="./.github/images/icon.png")
 
 # Create Player cube
 playerTexture = Texture(color=(0, 0, 255))
@@ -54,6 +54,16 @@ game.add_objects([player])
 # Display game at specific FPS
 game.display(FPS)
 ```
+And this is what the window would look like:
+### Window:
+<img src="./.github/images/screenshot0.png" width=500>
+
+### Window Icon:
+<img src="./.github/images/icon.png" width=100>
+
+### Functionality:
+- Spin in the x, y and z axes
+- Move with *w*, *a*, *s* and *d*
 
 ## License
 This project is licensed under the MIT license. Learn more [here](LICENSE)
