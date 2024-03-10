@@ -1,5 +1,4 @@
 from src.PyRenderLab import *
-from pygame.locals import *
 from typing import Final
 
 # Constants
@@ -27,7 +26,7 @@ def update(keys):
 
 
 # Initialize game
-game = Game(bg_color=(100, 100, 100), size=WINDOW_SIZE, update=update)
+game = Game(bg_color=(100, 100, 100), size=WINDOW_SIZE, update=update, window_title="Showcase", icon_image="./.github/images/icon.png")
 
 # Create Player cube
 playerTexture = Texture(color=(0, 0, 255))
