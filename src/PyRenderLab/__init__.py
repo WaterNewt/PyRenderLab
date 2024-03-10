@@ -35,7 +35,7 @@ class Shape3D(ABC):
             position (Iterable): The position of the shape on the screen.
         """
         if not isinstance(outline_height, int):
-            inform("Outline must be integer.")
+            raise ValueError(INVALID_OUTLINE_HEIGHT_TYPE)
         self.angle_x = 0
         self.angle_y = 0
         self.angle_z = 0
@@ -43,7 +43,7 @@ class Shape3D(ABC):
         self.game = gameInstance
         self.size = size
         self.texture = (255, 255, 255) if texture is None else texture
-        self.position = [gameInstance.screen.get_width()/2, gameInstance.screen.get_height()/2] if position is None else position
+        self.position = [gameInstance.screen.get_width()/2, gameInstance.screen.get_height()/2, 0] if position is None else position
         self.x, self.y, self.z = self.position
         self.rotation_x = np.array([])
         self.rotation_y = np.array([])
@@ -105,7 +105,7 @@ class Game:
     """
     The class for the game itself
     """
-    def __init__(self, bg_color: ColorValue = None, update=None, size: Tuple[float, float] = None, window_title: str = None, icon_image: ImagePath = None) -> None:
+    def __init__(self, bg_color: ColorValue = None, update=None, size: Tuple[float, float] = (800, 600), window_title: str = None, icon_image: ImagePath = None) -> None:
         """
         Initialize the game
 
@@ -117,7 +117,7 @@ class Game:
             icon_image (ImagePath): The icon of the game's window.
         """
         pygame.init()
-        self.size = (800, 600) if size is None else size
+        self.size = size
         self.screen = pygame.display.set_mode(size)
         if window_title is not None:
             self.caption = window_title
@@ -141,8 +141,8 @@ class Game:
             Will raise a TypeError if an item in the instances is not a subclass of the Shape3D class.
         """
         for index, value in enumerate(instances):
-            if not issubclass(value, Shape3D):
-                raise TypeError(f"Item {str(index)} must be sub classes of the Shape3D class")
+            if not isinstance(value, (Cube, Prism)):
+                raise TypeError(INVALID_OBJECT_TYPE)
         self.object_instances = instances
 
     def display(self, fps: float):
@@ -208,7 +208,7 @@ class Cube(Shape3D):
     """
     A class for a 3D Cube
     """
-    def __init__(self, gameInstance: Game, size: float, texture: Texture = Union[Texture, Tuple], position: Iterable[float, float, float] = None, outline_height: int = 1) -> None:
+    def __init__(self, gameInstance: Game, size: float, texture: Texture = Union[Texture, Tuple], position: Iterable = None, outline_height: int = 1) -> None:
         """
         Initialize the Cube class
 
