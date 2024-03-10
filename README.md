@@ -1,7 +1,6 @@
 # PyRenderLab
-A very simple, yet robust, 3D framework made in PyGame.
+A very simple, 3D framework made in PyGame. Just a personal project of mine.
 
-**WARNING: THIS IS JUST A PERSONAL PROJECT, NOT FOR COMMERCIAL USE**
 ---
 
 ## Setup
@@ -9,6 +8,11 @@ A very simple, yet robust, 3D framework made in PyGame.
 `pip3 install -r requirements.txt`
 - Run the setup file:
 `python3 setup.py install`
+
+## Important notes
+- The `img_path` attribute of the Texture class is functional but still in its infancy. This is due to its recent development.
+- This project is not made for commercial use. This is just a personal project of my mine.
+- All the 3D shapes in the library, are just classes inherited from the `Shape3D` abstract class. So feel free to add your own 3D shapes and contribute!
 
 ## Use
 Here is a sample script utilizing this framework
