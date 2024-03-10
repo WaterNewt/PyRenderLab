@@ -1,36 +1,41 @@
-from pygame.key import ScancodeWrapper
 from src.PyRenderLab import *
+from pygame.locals import *
+from typing import Final
 
-velocity = 5
+# Constants
+WINDOW_SIZE: Final[tuple] = (800, 600)
+VELOCITY: Final[int] = 5
+PLAYER_SIZE: Final[int] = 125
+FPS: Final[int] = 30
 
-class cubeUpdate(Update):
-    def __init__(self, object, keys: ScancodeWrapper) -> None:
-        if keys[pygame.K_w]:
-            object.size+=velocity
-        if keys[pygame.K_s]:
-            object.size-=velocity
-        if keys[pygame.K_d]:
-            object.angle_x+=0.01
-            object.angle_y+=0.01
-            object.angle_z+=0.01
-        if keys[pygame.K_a]:
-            object.angle_x-=0.01
-            object.angle_y-=0.01
-            object.angle_z-=0.01
 
-game = Game((100, 100, 100), size=(1000, 800))
-objects = []
+# Update Function
+def update(keys):
+    if keys[K_w]:
+        player.y -= VELOCITY
+    if keys[K_s]:
+        player.y += VELOCITY
+    if keys[K_a]:
+        player.x -= VELOCITY
+    if keys[K_d]:
+        player.x += VELOCITY
+    if keys[K_ESCAPE] or keys[K_q]:
+        game.stop()
+    player.angle_x += 0.05
+    player.angle_y += 0.05
+    player.angle_z += 0.05
 
-cube_size = 50
-xwidth = 10
-ywidth = 10
 
-texture = Texture(color=(0, 255, 0))
+# Initialize game
+game = Game(bg_color=(100, 100, 100), size=WINDOW_SIZE, update=update)
 
-for y in range(ywidth):
-    for x in range(xwidth):
-        new_Cube = Cube(game, cube_size, position=(x*cube_size, y*cube_size), outline_height=1, update=cubeUpdate, texture=texture)
-        objects.append(new_Cube)
+# Create Player cube
+playerTexture = Texture(color=(0, 0, 255))
+player = Cube(game, PLAYER_SIZE, texture=playerTexture, position=(WINDOW_SIZE[0] // 2, WINDOW_SIZE[1] // 2, 0))
+print(player)
 
-game.objects(objects)
-game.display(30)
+# Add player to the game
+game.add_objects([player])
+
+# Display game at specific FPS
+game.display(FPS)
