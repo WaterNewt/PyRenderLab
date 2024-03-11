@@ -165,3 +165,4 @@ ANGLE_Z = 2
 # Raise messages
 INVALID_OBJECT_TYPE = "Object must be a subclass of the Shape3D class"
 INVALID_OUTLINE_HEIGHT_TYPE = "outline_height must be an integer"
+INVALID_UPDATE_ARGUMENTS = "The update function must have 1 argument ('keys')"

@@ -131,7 +131,7 @@ class Game:
         else:
             self.update = update
             if len(inspect.getfullargspec(update).args) != 1:
-                raise ValueError("The update function must have 1 argument ('keys')")
+                raise ValueError(INVALID_UPDATE_ARGUMENTS)
         self.bg_color = (0, 0, 0) if bg_color is None else bg_color
         self.object_instances = []
         self.run = True
