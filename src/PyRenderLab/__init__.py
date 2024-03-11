@@ -25,7 +25,7 @@ class Shape3D(ABC):
     """
     An Abstract Base Class for all 3D geometrical shapes in a game.
     """
-    def __init__(self, gameInstance: 'Game', size: Number, texture: Union[Texture, Tuple] = None, position: Position = None, outline_height: int = 1) -> None:
+    def __init__(self, gameInstance: 'Game', size: Number, texture: Union['Texture', Tuple] = None, position: Position = None, outline_height: int = 1) -> None:
         """Initialization of the shape.
 
         Args:
