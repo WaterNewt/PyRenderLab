@@ -25,7 +25,7 @@ class Shape3D(ABC):
     """
     An Abstract Base Class for all 3D geometrical shapes in a game.
     """
-    def __init__(self, gameInstance: 'Game', size: Number, texture: 'Texture' = None, position: Position = None, outline_height: int = 1) -> None:
+    def __init__(self, gameInstance: 'Game', size: Number, texture: Union[Texture, Tuple] = None, position: Position = None, outline_height: int = 1) -> None:
         """Initialization of the shape.
 
         Args:
@@ -208,7 +208,7 @@ class Cube(Shape3D):
     """
     A class for a 3D Cube
     """
-    def __init__(self, gameInstance: Game, size: float, texture: Texture = Union[Texture, Tuple], position: Iterable = None, outline_height: int = 1) -> None:
+    def __init__(self, gameInstance: Game, size: float, texture: Union[Texture, Tuple] = None, position: Iterable = None, outline_height: int = 1) -> None:
         """
         Initialize the Cube class
 
@@ -268,7 +268,7 @@ class Prism(Shape3D):
     """
     A class for a 3D Prism
     """
-    def __init__(self, gameInstance: Game, size: float, texture: Texture = None, position: Iterable = None, outline_height=1) -> None:
+    def __init__(self, gameInstance: Game, size: float, texture: Union[Texture, Tuple] = None, position: Iterable = None, outline_height=1) -> None:
         """
         Initialize the Prism class
 
