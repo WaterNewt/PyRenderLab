@@ -76,7 +76,7 @@ class Shape3D(ABC):
 
     def rotate(self, angle: int, value: Number):
         """
-        Rotate the shape. It is recommended to use the angle parameter (.angle_x, .angle_y or .angle_z) instead.
+        Rotate the shape. It is recommended to use the angle attribute (.angle_x, .angle_y or .angle_z) instead.
 
         Args:
             angle (either ANGLE_X, ANGLE_Y or ANGLE_Z): The angle of the shape to rotate.
