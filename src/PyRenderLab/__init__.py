@@ -1,4 +1,5 @@
 # Imports
+import inspect
 import sys
 import pygame
 import numpy as np
@@ -25,7 +26,7 @@ class Shape3D(ABC):
     """
     An Abstract Base Class for all 3D geometrical shapes in a game.
     """
-    def __init__(self, gameInstance: 'Game', size: Number, texture: Union['Texture', Tuple] = None, position: Position = None, outline_height: int = 1) -> None:
+    def __init__(self, gameInstance: 'Game', size: Number, texture: 'Texture' = None, position: Position = None, outline_height: int = 1) -> None:
         """Initialization of the shape.
 
         Args:
@@ -125,7 +126,12 @@ class Game:
         if icon_image is not None:
             icon = pygame.image.load(icon_image)
             pygame.display.set_icon(icon)
-        self.update = None if update is None else update
+        if update is None:
+            self.update = None
+        else:
+            self.update = update
+            if len(inspect.getfullargspec(update).args) != 1:
+                raise ValueError("The update function must have 1 argument ('keys')")
         self.bg_color = (0, 0, 0) if bg_color is None else bg_color
         self.object_instances = []
         self.run = True
@@ -242,7 +248,7 @@ class Cube(Shape3D):
 
         for face in faces:
             if isinstance(self.texture, Iterable):
-                pygame.draw.polygon(self.game.screen, ColorValue(self.texture), face)
+                pygame.draw.polygon(self.game.screen, self.texture, face)
             else:
                 if self.texture.img_path:
                     image = pygame.image.load(self.texture.img_path)
