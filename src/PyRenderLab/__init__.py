@@ -341,3 +341,7 @@ class Prism(Shape3D):
         A string with the attributes of the instance of the class
         """
         return f'{self.__class__.__name__}(game=({self.game}), size={str(self.size)}, position={str(list(self.position))})'
+
+
+if __name__ == "__main__":
+    raise ValueError("Run as `import`")
