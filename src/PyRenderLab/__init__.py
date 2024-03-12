@@ -1,6 +1,7 @@
 # Imports
 import inspect
 import sys
+import types
 import pygame
 import numpy as np
 from os import PathLike
@@ -129,9 +130,12 @@ class Game:
         if update is None:
             self.update = None
         else:
-            self.update = update
-            if len(inspect.getfullargspec(update).args) != 1:
-                raise ValueError(INVALID_UPDATE_ARGUMENTS)
+            if isinstance(update, types.FunctionType):
+                self.update = update
+                if len(inspect.getfullargspec(update).args) != 1:
+                    raise ValueError(INVALID_UPDATE_ARGUMENTS)
+            else:
+                raise TypeError(INVALID_UPDATE_TYPE)
         self.bg_color = (0, 0, 0) if bg_color is None else bg_color
         self.object_instances = []
         self.run = True
