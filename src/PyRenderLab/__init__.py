@@ -185,7 +185,7 @@ class Game:
         """
         A string with the attributes of the instance of the class
         """
-        return f'Game(update={None if self.update is None else str(self.update.__name__)})'
+        return f'{self.__class__.__name__}(update={None if self.update is None else str(self.update.__name__)})'
 
 
 class Texture:
@@ -207,7 +207,7 @@ class Texture:
         """
         A string with the attributes of the instance of the class
         """
-        return f'Texture(img_path={str(self.img_path)}, color={str(tuple(self.color))})'
+        return f'{self.__class__.__name__}(img_path={str(self.img_path)}, color={str(tuple(self.color))})'
 
 
 class Cube(Shape3D):
@@ -267,7 +267,7 @@ class Cube(Shape3D):
         """
         A string with the attributes of the instance of the class
         """
-        return f'Cube(game=({self.game}), size={str(self.size)}, position={str(list(self.position))})'
+        return f'{self.__class__.__name__}(game=({self.game}), size={str(self.size)}, position={str(list(self.position))})'
 
 
 class Prism(Shape3D):
@@ -340,4 +340,4 @@ class Prism(Shape3D):
         """
         A string with the attributes of the instance of the class
         """
-        return f'Prism(game=({self.game}), size={str(self.size)}, position={str(list(self.position))})'
+        return f'{self.__class__.__name__}(game=({self.game}), size={str(self.size)}, position={str(list(self.position))})'
