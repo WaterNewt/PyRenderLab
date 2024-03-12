@@ -321,7 +321,7 @@ class Prism(Shape3D):
 
         for face in faces:
             if isinstance(self.texture, Iterable):
-                pygame.draw.polygon(self.game.screen, ColorValue(self.texture), face)
+                pygame.draw.polygon(self.game.screen, self.texture, face)
             else:
                 if self.texture.img_path:
                     image = pygame.image.load(self.texture.img_path)
