@@ -118,12 +118,22 @@ class Game:
             window_title (str): The title of the game's window.
             icon_image (ImagePath): The icon of the game's window.
         """
+        self.keys = None
+        self.mousex = None
+        self.mousey = None
         pygame.init()
-        self.size = size
-        self.screen = pygame.display.set_mode(size)
+        if isinstance(size, tuple) and len(size) == 2 and all(isinstance(x, (int, float)) for x in size):
+            self.size = size
+            self.width, self.height = self.size
+        else:
+            raise TypeError(INVALID_SIZE_TYPE)
+        self.screen = pygame.display.set_mode(self.size)
         if window_title is not None:
-            self.caption = window_title
-            pygame.display.set_caption(self.caption)
+            if isinstance(window_title, str):
+                self.caption = window_title
+                pygame.display.set_caption(self.caption)
+            else:
+                raise TypeError(INVALID_WINDOW_TITLE_TYPE)
         if icon_image is not None:
             icon = pygame.image.load(icon_image)
             pygame.display.set_icon(icon)
@@ -132,8 +142,6 @@ class Game:
         else:
             if isinstance(update, types.FunctionType):
                 self.update = update
-                if len(inspect.getfullargspec(update).args) != 1:
-                    raise ValueError(INVALID_UPDATE_ARGUMENTS)
             else:
                 raise TypeError(INVALID_UPDATE_TYPE)
         self.bg_color = (0, 0, 0) if bg_color is None else bg_color
@@ -175,7 +183,9 @@ class Game:
             except AttributeError:
                 pass
             if self.update is not None:
-                self.update(keys=pygame.key.get_pressed())
+                self.mousex, self.mousey = pygame.mouse.get_pos()
+                self.keys = pygame.key.get_pressed()
+                self.update()
             pygame.display.update()
             clock.tick(fps)
 
