@@ -17,46 +17,38 @@ A very simple, 3D framework made in PyGame. Just a personal project of mine.
 ## Use
 Here is a sample script utilizing this framework
 ```python
-from pyrenderlab import *
-from typing import Final
+import pyrenderlab
 
-# Constants
-WINDOW_SIZE: Final[tuple] = (800, 600)
-VELOCITY: Final[int] = 5
-PLAYER_SIZE: Final[int] = 125
-FPS: Final[int] = 30
+VELOCITY = 5
 
 
-# Update Function
-def update(keys):
-    if keys[K_w]:
-        player.y -= VELOCITY
-    if keys[K_s]:
-        player.y += VELOCITY
-    if keys[K_a]:
-        player.x -= VELOCITY
-    if keys[K_d]:
-        player.x += VELOCITY
-    if keys[K_ESCAPE] or keys[K_q]:
+def update():
+    keys = game.keys
+    if keys[pyrenderlab.K_w]:
+        new_shape.y -= VELOCITY
+    if keys[pyrenderlab.K_s]:
+        new_shape.y += VELOCITY
+    if keys[pyrenderlab.K_a]:
+        new_shape.x -= VELOCITY
+    if keys[pyrenderlab.K_d]:
+        new_shape.x += VELOCITY
+    if keys[pyrenderlab.K_q]:
         game.stop()
-    player.angle_x += 0.05
-    player.angle_y += 0.05
-    player.angle_z += 0.05
+    diff_x = (game.mousex - centerx) / 500
+    diff_y = (game.mousey - centery) / 500
+    new_shape.angle_y = diff_x
+    new_shape.angle_x = diff_y
 
 
-# Initialize game
-game = Game(bg_color=(100, 100, 100), size=WINDOW_SIZE, update=update, window_title="Showcase", icon_image="./.github/images/icon.png")
+game = pyrenderlab.Game(bg_color=(0, 0, 0), update=update)
+centerx, centery = game.width / 2, game.height / 2
 
-# Create Player cube
-playerTexture = Texture(color=(0, 0, 255))
-player = Cube(game, PLAYER_SIZE, texture=playerTexture, position=(WINDOW_SIZE[0] // 2, WINDOW_SIZE[1] // 2, 0))
-print(player)
+new_shape = pyrenderlab.Cube(game, 150)
 
-# Add player to the game
-game.add_objects([player])
+all_shapes = [new_shape]
+game.add_objects(all_shapes)
 
-# Display game at specific FPS
-game.display(FPS)
+game.display(60)
 ```
 And this is what the window would look like:
 ### Window:
@@ -66,7 +58,7 @@ And this is what the window would look like:
 <img src="./.github/images/icon.png" width=100>
 
 ### Functionality:
-- Spin in the x, y and z axes
+- Spin in the x, y and z axes with the mouse movement
 - Move with *w*, *a*, *s* and *d*
 
 ## License
