@@ -163,8 +163,10 @@ ANGLE_Y = 1
 ANGLE_Z = 2
 
 # Raise messages
-INVALID_OBJECT_TYPE = "Object must be a subclass of the Shape3D class"
-INVALID_OUTLINE_HEIGHT_TYPE = "outline_height must be an integer"
+INVALID_OBJECT_TYPE = "Object must be a subclass of the `Shape3D` class"
+INVALID_OUTLINE_HEIGHT_TYPE = "`outline_height` must be an integer"
 INVALID_UPDATE_TYPE = "Update argument must be a function"
-INVALID_UPDATE_ARGUMENTS = "The update function must have 1 argument ('keys')"
-INVALID_ANGLE = "Please use either constants ANGLE_X, ANGLE_Y or ANGLE_Z"
+INVALID_UPDATE_ARGUMENTS = "The update function must have 1 argument (`keys`)"
+INVALID_ANGLE = "Please use either constants `ANGLE_X`, `ANGLE_Y` or `ANGLE_Z`"
+INVALID_SIZE_TYPE = "`size` must be a one-dimensional tuple with 2 items (width and height)"
+INVALID_WINDOW_TITLE_TYPE = "`window_title` must be a string"
