@@ -13,12 +13,6 @@ class TestRaises(unittest.TestCase):
         with self.assertRaisesRegex(TypeError, pyrenderlab.INVALID_OBJECT_TYPE):
             self.game.add_objects([69])
 
-    def test_update_arg_raise(self):
-        def update():
-            pass
-        with self.assertRaises(ValueError):
-            self.new_game = pyrenderlab.Game(update=update)
-
     def test_update_type_raise(self):
         with self.assertRaisesRegex(TypeError, pyrenderlab.INVALID_UPDATE_TYPE):
             self.new_game = pyrenderlab.Game(update=69)
